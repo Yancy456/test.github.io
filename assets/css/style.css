@@ -66,10 +66,12 @@ img {
 .nav-inner {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.65rem 0;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0;
+  text-align: center;
 }
 
 .brand {
@@ -87,7 +89,8 @@ img {
 .nav-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 1rem;
+  justify-content: center;
+  gap: 0.35rem 1.15rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -105,11 +108,18 @@ img {
   color: var(--accent);
 }
 
-/* Hero */
+/* Hero — centered like typical project pages */
 .hero {
-  padding: 2.5rem 0 2rem;
+  padding: 2.5rem 0 2.25rem;
   background: linear-gradient(180deg, var(--accent-soft) 0%, var(--bg) 55%);
   border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero h1 {
@@ -118,6 +128,8 @@ img {
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -0.02em;
+  text-align: center;
+  max-width: 22em;
 }
 
 .hero-tagline {
@@ -125,24 +137,36 @@ img {
   font-size: 1.1rem;
   color: var(--muted);
   max-width: 52ch;
+  text-align: center;
 }
 
 .authors {
   margin: 0 0 1.25rem;
   font-size: 0.95rem;
   color: var(--muted);
+  text-align: center;
+  max-width: 60ch;
 }
 
 .affil {
   font-size: 0.88rem;
   color: var(--muted);
   margin-bottom: 1.25rem;
+  text-align: center;
+  max-width: 60ch;
 }
 
 .btn-row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.6rem;
+}
+
+.hero .compare-note {
+  margin-top: 1rem;
+  text-align: center;
+  max-width: 52ch;
 }
 
 .btn {
@@ -184,10 +208,25 @@ img {
 section {
   padding: 2.75rem 0;
   border-bottom: 1px solid var(--border);
+  text-align: center;
 }
 
 section:last-of-type {
   border-bottom: none;
+}
+
+section .container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+section .container > p,
+section .container > .callout,
+section .container > .compare-note {
+  max-width: min(65ch, 100%);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-title {
@@ -195,12 +234,15 @@ section:last-of-type {
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+  text-align: center;
+  width: 100%;
 }
 
 .section-lead {
   margin: 0 0 1.25rem;
   color: var(--muted);
   max-width: 65ch;
+  text-align: center;
 }
 
 /* Stats grid */
@@ -208,7 +250,9 @@ section:last-of-type {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.75rem;
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
+  width: 100%;
+  max-width: 900px;
 }
 
 .stat-card {
@@ -237,6 +281,10 @@ section:last-of-type {
 .grid-2 {
   display: grid;
   gap: 1rem;
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+  text-align: center;
 }
 
 @media (min-width: 720px) {
@@ -251,12 +299,14 @@ section:last-of-type {
   border-radius: var(--radius);
   padding: 1rem 1.1rem;
   box-shadow: var(--shadow);
+  text-align: center;
 }
 
 .type-card h3 {
   margin: 0 0 0.5rem;
   font-size: 0.95rem;
   font-weight: 700;
+  text-align: center;
 }
 
 .type-card p {
@@ -264,13 +314,16 @@ section:last-of-type {
   font-size: 0.88rem;
   color: var(--muted);
   line-height: 1.5;
+  text-align: center;
 }
 
 /* Pipeline */
 .pipeline {
   display: grid;
   gap: 1rem;
-  margin: 1.25rem 0;
+  margin: 1.25rem auto;
+  width: 100%;
+  max-width: 1000px;
 }
 
 @media (min-width: 900px) {
@@ -286,6 +339,7 @@ section:last-of-type {
   padding: 1.15rem;
   position: relative;
   box-shadow: var(--shadow);
+  text-align: center;
 }
 
 .pipe-step strong {
@@ -295,17 +349,20 @@ section:last-of-type {
   letter-spacing: 0.06em;
   color: var(--accent);
   margin-bottom: 0.35rem;
+  text-align: center;
 }
 
 .pipe-step h3 {
   margin: 0 0 0.5rem;
   font-size: 1rem;
+  text-align: center;
 }
 
 .pipe-step p {
   margin: 0;
   font-size: 0.9rem;
   color: var(--muted);
+  text-align: center;
 }
 
 /* Tables */
@@ -316,6 +373,9 @@ section:last-of-type {
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 table.results {
@@ -327,7 +387,7 @@ table.results {
 table.results th,
 table.results td {
   padding: 0.5rem 0.65rem;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid var(--border);
 }
 
@@ -347,6 +407,7 @@ table.results .group-row td {
   font-size: 0.78rem;
   font-style: italic;
   color: var(--muted);
+  text-align: center;
 }
 
 table.results .highlight {
@@ -355,7 +416,7 @@ table.results .highlight {
 }
 
 table.results td.num {
-  text-align: right;
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
@@ -364,7 +425,7 @@ caption.table-caption {
   padding: 0.6rem 0.75rem;
   font-size: 0.78rem;
   color: var(--muted);
-  text-align: left;
+  text-align: center;
 }
 
 /* Distribution mini table */
@@ -379,6 +440,7 @@ table.dist th,
 table.dist td {
   padding: 0.45rem 0.6rem;
   border: 1px solid var(--border);
+  text-align: center;
 }
 
 table.dist th {
@@ -389,6 +451,10 @@ table.dist th {
 .bib-block {
   position: relative;
   margin: 1rem 0;
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .bib-block pre {
@@ -401,6 +467,7 @@ table.dist th {
   font-size: 0.78rem;
   line-height: 1.5;
   overflow-x: auto;
+  text-align: left;
 }
 
 .btn-copy {
@@ -426,6 +493,7 @@ table.dist th {
   font-size: 0.88rem;
   color: var(--muted);
   margin-top: 0.75rem;
+  text-align: center;
 }
 
 /* Footer */
@@ -462,13 +530,16 @@ table.dist th {
 /* SR VLM callout */
 .callout {
   background: var(--accent-soft);
-  border-left: 4px solid var(--accent);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
   padding: 1rem 1.15rem;
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius);
   margin: 1.25rem 0;
+  text-align: center;
 }
 
 .callout p {
   margin: 0;
   font-size: 0.95rem;
+  text-align: center;
 }
