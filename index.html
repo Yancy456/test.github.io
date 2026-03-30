@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ReSynth — Real-World Synthetic Spatial Reasoning Dataset for diagnosing and improving visual spatial reasoning in LVLMs."
+    />
+    <title>ReSynth | Real-World Spatial Reasoning in LVLMs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-inner">
+        <a class="brand" href="#">ReSynth</a>
+        <nav aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#dataset">Dataset</a></li>
+            <li><a href="#method">Method</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#bibtex">BibTeX</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="top">
+        <div class="container">
+          <h1>
+            ReSynth: A Dataset for Diagnosing and Improving Real-World Spatial
+            Reasoning in LVLMs
+          </h1>
+          <p class="hero-tagline">
+            A benchmark pairing a real-world test set with large-scale synthetic
+            training data from <strong>AI-Assisted Rendering (AIR)</strong>, plus
+            <strong>SRVLM</strong> — an LVLM fine-tuned for visual spatial
+            reasoning.
+          </p>
+          <p class="authors">
+            <em>Author list — replace after de-anonymization (see README).</em>
+          </p>
+          <p class="affil">
+            <!-- TODO: institutions -->
+          </p>
+          <div class="btn-row" aria-label="Resource links (placeholders)">
+            <a
+              class="btn btn-primary"
+              href="#"
+              title="TODO: ACL Anthology / arXiv / PDF"
+              >Paper</a
+            >
+            <a class="btn" href="#" title="TODO: GitHub code repository"
+              >Code</a
+            >
+            <a class="btn" href="#" title="TODO: Hugging Face / download"
+              >Dataset</a
+            >
+            <a class="btn" href="#" title="TODO: Model weights">Model</a>
+            <a class="btn" href="#bibtex">BibTeX</a>
+            <a
+              class="btn"
+              href="https://github.com/Yancy456/test.github.io"
+              rel="noopener"
+              >This repo</a
+            >
+          </div>
+          <p class="compare-note" style="margin-top: 1rem">
+            Resource buttons marked <code>TODO</code> are placeholders — set
+            real URLs in <code>index.html</code> before public release.
+          </p>
+        </div>
+      </section>
+
+      <section id="overview">
+        <div class="container">
+          <h2 class="section-title">Overview</h2>
+          <p class="section-lead">
+            Understanding spatial relations is essential for Large
+            Vision-Language Models (LVLMs) to interact with the physical world.
+            Yet real-world visual spatial reasoning (VSR) remains
+            underexplored: strong models still fail on basic geometric queries in
+            complex imagery.
+          </p>
+          <p>
+            We introduce <strong>ReSynth</strong> (Real-World Synthetic Spatial
+            Reasoning Dataset): a benchmark with
+            <strong>real-world evaluation</strong> data and
+            <strong>scalable synthetic training</strong> data. Our studies show
+            that inference-time techniques (e.g., Chain-of-Thought) and model
+            scaling yield only marginal gains on VSR — pointing to a lack of
+            appropriate spatially grounded training data rather than a pure
+            “reasoning deficit.”
+          </p>
+          <p>
+            To obtain physically consistent, photorealistic supervision, we
+            propose <strong>AI-Assisted Rendering (AIR)</strong>: 3D geometric
+            prerendering for accurate ground truth, plus generative texturing for
+            realism. Training on the resulting synthetic set substantially
+            improves VSR; our fine-tuned
+            <strong>SRVLM-8B</strong> reaches
+            <strong>68.6%</strong> on ReSynth and <strong>71.3%</strong> on
+            RealWorldQA (among reported baselines in the paper).
+          </p>
+        </div>
+      </section>
+
+      <section id="dataset">
+        <div class="container">
+          <h2 class="section-title">Dataset</h2>
+          <p class="section-lead">
+            ReSynth has two parts: a <em>Real-World Test Set</em> for evaluation
+            in authentic scenes, and a <em>Synthetic Training Set</em> produced
+            by AIR with geometric ground truth.
+          </p>
+
+          <div class="stats-grid" aria-label="Dataset scale">
+            <div class="stat-card">
+              <div class="stat-value">3k</div>
+              <div class="stat-label">Real-world images</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">6k</div>
+              <div class="stat-label">Real-world QA pairs</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">200k</div>
+              <div class="stat-label">Synthetic images</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">~407k</div>
+              <div class="stat-label">Synthetic QA pairs (train)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Question types</div>
+            </div>
+          </div>
+
+          <p>
+            Real-world images span diverse daily-life scenes; each image has
+            spatially grounded questions with multi-annotator review. The
+            synthetic side pairs template-based questions with answers computed
+            from 3D scene metadata (positions, orientations, bounding boxes).
+          </p>
+
+          <h3 class="section-title" style="font-size: 1.1rem; margin-top: 2rem">
+            Question types
+          </h3>
+          <div class="grid-2">
+            <article class="type-card">
+              <h3>1. Relative direction</h3>
+              <p>
+                Target direction relative to a reference in 3D; disambiguate
+                true 3D relations from misleading 2D projections.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>2. Absolute direction</h3>
+              <p>
+                Spatial layout from the camera’s fixed perspective using
+                perspective, size, alignment, and context.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>3. Link prediction</h3>
+              <p>
+                Relational links between two targets via a reference; includes
+                between-ness and comparative distance.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>4. Object size</h3>
+              <p>
+                Size judgments from visual context (perspective, overlap), not
+                prior world knowledge alone.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>5. Existence</h3>
+              <p>
+                Detect objects from visual evidence only; avoid spurious
+                contextual assumptions.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>6. Counting</h3>
+              <p>
+                Count under occlusion and perspective without scene assumptions.
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>7. Distance</h3>
+              <p>
+                Separation from visual perspective; avoid scaling shortcuts
+                (e.g., “equally spaced” bias).
+              </p>
+            </article>
+            <article class="type-card">
+              <h3>8. Common sense</h3>
+              <p>
+                Plausibility from contextual cues (e.g., weather) without
+                dataset-specific bias.
+              </p>
+            </article>
+          </div>
+
+          <h3 class="section-title" style="font-size: 1.1rem; margin-top: 2rem">
+            Train / test distribution (paper Table)
+          </h3>
+          <div class="table-wrap">
+            <table class="dist">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Train</th>
+                  <th>Test</th>
+                  <th>Share (approx.)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Relative direction</td>
+                  <td>142.6k</td>
+                  <td>2100</td>
+                  <td>~35.0%</td>
+                </tr>
+                <tr>
+                  <td>Absolute direction</td>
+                  <td>87.6k</td>
+                  <td>1280</td>
+                  <td>~21.5%</td>
+                </tr>
+                <tr>
+                  <td>Link prediction</td>
+                  <td>51.9k</td>
+                  <td>770</td>
+                  <td>~12.7%</td>
+                </tr>
+                <tr>
+                  <td>Object size</td>
+                  <td>20.8k</td>
+                  <td>316</td>
+                  <td>~5.1%</td>
+                </tr>
+                <tr>
+                  <td>Existence</td>
+                  <td>23.7k</td>
+                  <td>346</td>
+                  <td>~5.8%</td>
+                </tr>
+                <tr>
+                  <td>Counting</td>
+                  <td>18.4k</td>
+                  <td>266</td>
+                  <td>~4.5%</td>
+                </tr>
+                <tr>
+                  <td>Distance</td>
+                  <td>31.9k</td>
+                  <td>471</td>
+                  <td>~7.8%</td>
+                </tr>
+                <tr>
+                  <td>Common sense</td>
+                  <td>30.6k</td>
+                  <td>451</td>
+                  <td>~7.5%</td>
+                </tr>
+                <tr>
+                  <th>Total</th>
+                  <th>407.5k</th>
+                  <th>6000</th>
+                  <th>100%</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="figure-placeholder">
+            <strong>Figures (optional)</strong><br />
+            Add teaser / pipeline / qualitative images under
+            <code>assets/img/</code> and reference them here.
+          </div>
+        </div>
+      </section>
+
+      <section id="method">
+        <div class="container">
+          <h2 class="section-title">Method</h2>
+          <p class="section-lead">
+            <strong>AIR</strong> bridges simulation geometry and real-world
+            appearance; <strong>SRVLM</strong> is built by fine-tuning an LVLM on
+            ReSynth synthetic training data with RL (DAPO) as described in the
+            paper.
+          </p>
+
+          <div class="pipeline">
+            <div class="pipe-step">
+              <strong>Stage 1</strong>
+              <h3>Geometric prerendering</h3>
+              <p>
+                Scene presetting, object curation, stochastic material coloring,
+                3D placement with validation (collision, occlusion), then Blender
+                rendering. Metadata (
+                <code>scene_pose_dict</code>, <code>color_info</code>) drives
+                downstream QA.
+              </p>
+            </div>
+            <div class="pipe-step">
+              <strong>Stage 2</strong>
+              <h3>AI texturing</h3>
+              <p>
+                Compositional prompts for indoor/outdoor scenes; image editing
+                (e.g., Qwen-Image-Edit in the paper); automatic filtering with a
+                vision assessor (e.g., Qwen2.5-VL) for quality control.
+              </p>
+            </div>
+            <div class="pipe-step">
+              <strong>Stage 3</strong>
+              <h3>QA generation</h3>
+              <p>
+                Template-based questions with lexical variation; answers from
+                geometric functions on 3D state (relative direction, distance,
+                counting, size, etc.).
+              </p>
+            </div>
+          </div>
+
+          <div class="callout">
+            <p>
+              <strong>SRVLM-8B</strong> is fine-tuned from
+              <strong>Qwen3-VL-Thinking-8B</strong> on the ReSynth synthetic
+              training set using <strong>DAPO</strong> (group sampling, decoupled
+              clipping). See the paper for reward design and training
+              hyperparameters.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="results">
+        <div class="container">
+          <h2 class="section-title">Results</h2>
+          <p class="section-lead">
+            Main evaluation on ReSynth, RealWorldQA, and 3DSRBench; general VL
+            benchmarks MMMU and MMBench to check for capability regression.
+            Accuracy (%) with LLM-as-a-judge as in the paper.
+          </p>
+
+          <div class="table-wrap">
+            <table class="results">
+              <caption class="table-caption">
+                Selected rows from the paper’s main table. Think = thinking
+                model. Avg. = mean over the three VSR benchmarks.
+              </caption>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Think</th>
+                  <th class="num">ReSynth</th>
+                  <th class="num">RealWorldQA</th>
+                  <th class="num">3DSRBench</th>
+                  <th class="num">Avg.</th>
+                  <th class="num">MMMU</th>
+                  <th class="num">MMBench</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="group-row">
+                  <td colspan="8">Closed source</td>
+                </tr>
+                <tr>
+                  <td>GPT-4o</td>
+                  <td>—</td>
+                  <td class="num">56.2</td>
+                  <td class="num">61.0</td>
+                  <td class="num">45.3</td>
+                  <td class="num">54.2</td>
+                  <td class="num">69.1</td>
+                  <td class="num">83.4</td>
+                </tr>
+                <tr>
+                  <td>Gemini-2.5-Pro</td>
+                  <td>✓</td>
+                  <td class="num">55.3</td>
+                  <td class="num">70.2</td>
+                  <td class="num">50.4</td>
+                  <td class="num">58.6</td>
+                  <td class="num">79.6</td>
+                  <td class="num">85.6</td>
+                </tr>
+                <tr>
+                  <td>Claude-3.7-Sonnet</td>
+                  <td>✓</td>
+                  <td class="num">54.7</td>
+                  <td class="num">67.1</td>
+                  <td class="num">46.8</td>
+                  <td class="num">56.2</td>
+                  <td class="num">75.0</td>
+                  <td class="num">84.7</td>
+                </tr>
+                <tr class="group-row">
+                  <td colspan="8">Open source</td>
+                </tr>
+                <tr>
+                  <td>Qwen2.5-VL-7B</td>
+                  <td>—</td>
+                  <td class="num">52.8</td>
+                  <td class="num">67.7</td>
+                  <td class="num">49.2</td>
+                  <td class="num">56.6</td>
+                  <td class="num">58.6</td>
+                  <td class="num">79.9</td>
+                </tr>
+                <tr>
+                  <td>Qwen3-VL-8B-Thinking</td>
+                  <td>✓</td>
+                  <td class="num">54.1</td>
+                  <td class="num">64.7</td>
+                  <td class="num">44.1</td>
+                  <td class="num">54.3</td>
+                  <td class="num">68.8</td>
+                  <td class="num">79.5</td>
+                </tr>
+                <tr>
+                  <td>LLaVA-NeXT-8B</td>
+                  <td>—</td>
+                  <td class="num">46.3</td>
+                  <td class="num">58.2</td>
+                  <td class="num">51.1</td>
+                  <td class="num">51.9</td>
+                  <td class="num">46.7</td>
+                  <td class="num">72.5</td>
+                </tr>
+                <tr>
+                  <td class="highlight">SRVLM-8B (Ours)</td>
+                  <td>—</td>
+                  <td class="num highlight">68.6</td>
+                  <td class="num highlight">71.3</td>
+                  <td class="num highlight">56.3</td>
+                  <td class="num highlight">65.4</td>
+                  <td class="num highlight">67.8</td>
+                  <td class="num highlight">78.1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="compare-note">
+            <strong>Ablation (avg. over VSR benchmarks, paper):</strong>
+            Qwen3-VL-Thinking-8B base 52.6% → + Prerender only 58.2% → + AIR
+            (full) <strong>65.4%</strong>.
+          </p>
+        </div>
+      </section>
+
+      <section id="bibtex">
+        <div class="container">
+          <h2 class="section-title">BibTeX</h2>
+          <p class="section-lead">
+            Placeholder entry — replace <code>author</code>,
+            <code>booktitle</code>/<code>journal</code>, and
+            <code>year</code> after publication.
+          </p>
+          <div class="bib-block">
+            <button type="button" class="btn-copy" id="copy-bibtex">
+              Copy
+            </button>
+            <pre id="bibtex-content">@misc{resynth2026,
+  title        = {ReSynth: A Dataset for Diagnosing and Improving Real-World Spatial Reasoning in LVLMs},
+  author       = {TODO},
+  year         = {2026},
+  note         = {TODO: replace with @inproceedings and ACL Anthology URL when available}
+}</pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          Project page for <strong>ReSynth</strong>. Source:
+          <a
+            href="https://github.com/Yancy456/test.github.io"
+            rel="noopener"
+            >github.com/Yancy456/test.github.io</a
+          >
+        </p>
+        <p>
+          Built as a static site for
+          <a
+            href="https://pages.github.com/"
+            rel="noopener"
+            >GitHub Pages</a
+          >. Content derived from the ReSynth paper manuscript.
+        </p>
+      </div>
+    </footer>
+
+    <script src="assets/js/main.js" defer></script>
+  </body>
+</html>
